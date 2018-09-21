@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录测试</title>
+    <!-- bootcdn -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.bootcss.com/jsencrypt/2.3.1/jsencrypt.min.js"></script>
+    <!-- 自定义 -->
+    <link th:href="@{/css/login/reset.css}" rel="stylesheet">
+    <link th:href="@{/css/login/login.css}" rel="stylesheet">
+    <script th:src="@{/js/login/ew_login.js}"></script>
+
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+
+<div class="loginbg">
+    <div class="loginwrapper">
+        <div class="loginbox">
+            <h1>安人服务网关</h1>
+            <div class="logininput">
+                <ul>
+                    <li class="login-item selectitem">
+                        <div class="input-group">
+                            <span class="selecture">服务网关</span>
+                            <i class="arrow"></i>
+                            <ul class="dropbox" style="display: none;">
+                                <li>服务网关</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="login-item">
+                        <i class="input-icon username"></i>
+                        <input type="text" id="loginmain_vo_yhDm" class="inputure" placeholder="请输入用户名" onkeydown="doKeyDown(event,1)" autocomplete="off">
+                    </li>
+                    <li class="login-item">
+                        <i class="input-icon password"></i>
+                        <input type="password" id="loginmain_vo_dlmm" class="inputure" placeholder="请输入密码" onkeydown="doKeyDown(event,2)" autocomplete="off">
+                    </li>
+                </ul>
+                <!-- 错误信息 -->
+                <div class="errormsg" style="display: none;">
+                    <i class="errorico"></i><span class="msg">用户名或密码错误</span>
+                </div>
+            </div>
+            <label class="checkbox">
+                <input type="checkbox" id="loginmain_jzmm" name="jzmm">记住密码
+            </label>
+            <a href="javascript:;;" class="btn" id="loginbtn">登录</a>
+        </div>
+
+    </div>
+</div>
+<div id="bg" class="bg"
+     style="position: absolute; z-index: 22; background-color: white; filter: alpha(opacity=30); opacity: 0.3; left: 0; top: 0;"></div>
+</body>
+
+</body>
+</html>

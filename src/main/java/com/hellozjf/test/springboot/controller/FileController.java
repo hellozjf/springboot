@@ -1,7 +1,7 @@
 package com.hellozjf.test.springboot.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellozjf.test.springboot.config.FileConfig;
 import com.hellozjf.test.springboot.vo.HelloObject;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,8 @@ public class FileController {
         // 我还需要从文件中获取信息，并将信息写入到helloObjectList中
         try {
             byte[] bytes = file.getBytes();
-            List<HelloObject> list = JSONArray.parseArray(new String(bytes), HelloObject.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<HelloObject> list = objectMapper.readValue(bytes, new TypeReference<List<HelloObject>>(){});
             helloObjectList.clear();
             helloObjectList.addAll(list);
             log.debug("clear helloObjectList and add {}", list);

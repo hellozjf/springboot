@@ -1,8 +1,6 @@
 package com.hellozjf.test.springboot.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellozjf.test.springboot.vo.HelloObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +43,7 @@ public class JsonController {
         response.setContentType("application/force-download");
         response.addHeader("Content-Disposition", "attachment;fileName=download.json");
         try (OutputStream out = response.getOutputStream()) {
-            Object object = JSON.toJSON(helloObject);
-            if (object instanceof JSONObject) {
-                JSONObject jsonObject = (JSONObject) object;
-                out.write(jsonObject.toJSONString().getBytes());
-                out.flush();
-            }
+            writeObjectToOutputStream(helloObject, out);
         } catch (IOException e) {
             log.error("发送文件发生异常：{}", e);
         }
@@ -61,14 +54,16 @@ public class JsonController {
         response.setContentType("application/force-download");
         response.addHeader("Content-Disposition", "attachment;fileName=downloadList.json");
         try (OutputStream out = response.getOutputStream()) {
-            Object object = JSON.toJSON(helloObjectList);
-            if (object instanceof JSONArray) {
-                JSONArray jsonArray = (JSONArray) object;
-                out.write(jsonArray.toJSONString().getBytes());
-                out.flush();
-            }
+            writeObjectToOutputStream(helloObjectList, out);
         } catch (IOException e) {
             log.error("发送文件发生异常：{}", e);
         }
+    }
+
+    private void writeObjectToOutputStream(Object object, OutputStream out) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(object);
+        out.write(jsonString.getBytes());
+        out.flush();
     }
 }

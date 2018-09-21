@@ -1,8 +1,6 @@
 package com.hellozjf.test.springboot.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hellozjf.test.springboot.vo.HelloObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,24 +70,12 @@ public class BeanConfig {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") HelloObject helloObject,
-                                               @Qualifier("helloObjectList") List<HelloObject> helloObjectList) {
+    public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
+                                               @Qualifier("helloObjectList") final List<HelloObject> helloObjectList) {
         return args -> {
-            Object object = JSON.toJSON(helloObject);
-            if (object instanceof JSONObject) {
-                JSONObject jsonObject = (JSONObject) object;
-                log.debug("jsonObject = {}", jsonObject);
-            } else {
-                log.debug("object = {}", object);
-            }
-
-            object = JSON.toJSON(helloObjectList);
-            if (object instanceof JSONArray) {
-                JSONArray jsonArray = (JSONArray) object;
-                log.debug("jsonArray = {}", jsonArray);
-            } else {
-                log.debug("object = {}", object);
-            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
+            log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
         };
     }
 }

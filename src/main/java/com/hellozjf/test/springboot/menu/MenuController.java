@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MenuController {
 
-    @GetMapping
+    @GetMapping("/")
     public String index() {
         return "index";
     }
@@ -22,5 +22,15 @@ public class MenuController {
     @GetMapping("/uploadStatus")
     public String uploadStatus() {
         return "upload/uploadStatus";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login/login";
+    }
+
+    @GetMapping("/uri")
+    public String uri() {
+        return "uri/uri";
     }
 }

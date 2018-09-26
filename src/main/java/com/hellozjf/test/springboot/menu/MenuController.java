@@ -33,4 +33,9 @@ public class MenuController {
     public String uri() {
         return "uri/uri";
     }
+
+    @GetMapping("/helloObject")
+    public String hello() {
+        return "helloObject/helloObject";
+    }
 }

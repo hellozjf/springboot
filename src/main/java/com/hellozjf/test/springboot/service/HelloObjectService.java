@@ -1,12 +1,12 @@
 package com.hellozjf.test.springboot.service;
 
-import com.hellozjf.test.springboot.vo.HelloObjectVO;
+import com.hellozjf.test.springboot.dataobject.HelloObject;
 
 /**
  * @author Jingfeng Zhou
  */
 public interface HelloObjectService {
-    HelloObjectVO findById(Long id);
-    HelloObjectVO save(HelloObjectVO helloObjectVO);
+    HelloObject findById(Long id);
+    HelloObject save(HelloObject helloObject);
     void deleteById(Long id);
 }

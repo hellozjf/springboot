@@ -1,13 +1,16 @@
 package com.hellozjf.test.springboot.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hellozjf.test.springboot.vo.HelloObject;
+import com.hellozjf.test.springboot.dataobject.HelloObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,8 +30,8 @@ public class BeanConfig {
         helloObject.setD(12.56);
         helloObject.setF(1.2f);
         helloObject.setFlag(false);
-        helloObject.setId(1024);
-        helloObject.setLid(11111111L);
+        helloObject.setI(1024);
+        helloObject.setId(11111111L);
         helloObject.setName("hello");
         helloObject.setTime(new Date());
         return helloObject;
@@ -42,8 +45,8 @@ public class BeanConfig {
         helloObject.setD(78.56);
         helloObject.setF(123.42f);
         helloObject.setFlag(true);
-        helloObject.setId(1024324);
-        helloObject.setLid(11111222L);
+        helloObject.setI(1024324);
+        helloObject.setId(11111222L);
         helloObject.setName("helloworld");
         helloObject.setTime(new Date());
         return helloObject;
@@ -60,8 +63,8 @@ public class BeanConfig {
             helloObject.setD(Double.valueOf(s));
             helloObject.setF(Float.valueOf(s));
             helloObject.setFlag(i % 2 == 0 ? true : false);
-            helloObject.setId(i);
-            helloObject.setLid((long) i * i * i);
+            helloObject.setI(i);
+            helloObject.setId((long) i * i * i);
             helloObject.setName(s);
             helloObject.setTime(new Date());
             helloObjectList.add(helloObject);
@@ -76,6 +79,18 @@ public class BeanConfig {
             ObjectMapper objectMapper = new ObjectMapper();
             log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
             log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
+
+            // 测试URL编码
+            String hello = "你好";
+            String encodeHello = URLEncoder.encode(hello, "UTF-8");
+            String decodeHello = URLDecoder.decode(encodeHello, "UTF-8");
+            log.debug("encodeHello = {}, decodeHello = {}", encodeHello, decodeHello);
+
+            // 测试时间
+            Date date = new Date();
+            log.debug("date = {}", date);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS.sss");
+            log.debug("dateString = {}", simpleDateFormat.format(date));
         };
     }
 }

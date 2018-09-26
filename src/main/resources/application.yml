@@ -8,3 +8,12 @@ file:
 spring:
   thymeleaf:
     cache: false
+  datasource:
+    url: jdbc:mysql://aliyun.hellozjf.com:3306/springboot?characterEncoding=utf-8&useSSL=false&autoReconnect=true
+    username: root
+    password: Zjf@1234
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update

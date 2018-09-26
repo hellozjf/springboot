@@ -53,12 +53,21 @@ public class HelloObjectController {
     public ResultVO validate(@Valid HelloObjectForm helloObjectForm,
                          BindingResult bindingResult) {
 
+        log.debug("enter validate");
+
         if (bindingResult.hasErrors()) {
             log.error("【提交表单】参数不正确, helloObjectForm={}", helloObjectForm);
             throw new HelloException(ResultEnum.PARAM_ERROR.getCode(),
                     bindingResult.getFieldError().getDefaultMessage());
         }
 
+        return ResultUtils.success();
+    }
+
+    @PostMapping(value = "/validateArray", consumes = "text/plain")
+    public ResultVO validateArray(@RequestBody String array) {
+        log.debug("enter validateArray");
+        log.debug("array={}", array);
         return ResultUtils.success();
     }
 

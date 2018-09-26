@@ -52,11 +52,10 @@ $(function () {
         });
 
         console.debug("bSendForm=" + bSendForm + " bSendArray=" + bSendArray);
-        return false;
-        // if (bSendForm && bSendArray) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        if (bSendForm && bSendArray) {
+            return true;
+        } else {
+            return false;
+        }
     });
 });

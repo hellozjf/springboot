@@ -35,7 +35,7 @@ public class HelloObjectController {
 
     @PostMapping("/")
     public ResultVO post(@Valid HelloObjectForm helloObjectForm,
-                                        BindingResult bindingResult) {
+                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.error("【提交表单】参数不正确, helloObjectForm={}", helloObjectForm);
@@ -47,6 +47,19 @@ public class HelloObjectController {
         BeanUtils.copyProperties(helloObjectForm, helloObject);
         HelloObject result = helloObjectService.save(helloObject);
         return ResultUtils.success(result);
+    }
+
+    @PostMapping("/validate")
+    public ResultVO validate(@Valid HelloObjectForm helloObjectForm,
+                         BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            log.error("【提交表单】参数不正确, helloObjectForm={}", helloObjectForm);
+            throw new HelloException(ResultEnum.PARAM_ERROR.getCode(),
+                    bindingResult.getFieldError().getDefaultMessage());
+        }
+
+        return ResultUtils.success();
     }
 
     @DeleteMapping("/{id}")

@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var basePath = /*[[@{/}]]*/;
+        /*]]>*/
+    </script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script th:src="@{/js/helloObject/helloObject.js}"></script>
+</head>
 <body>
 <h1>Spring Boot file upload example</h1>
-<form method="POST" action="/helloObject/" enctype="application/x-www-form-urlencoded">
+<form method="POST" th:action="@{/helloObject/}" enctype="application/x-www-form-urlencoded">
     <table>
         <tr>
             <td>i</td>
-            <td><input type="text" name="i"></td>
+            <td><input type="text" name="i" id="i"></td>
         </tr>
         <tr>
             <td>flag</td>
-            <td><input type="text" name="flag"></td>
+            <td><input type="text" name="flag" id="flag"></td>
         </tr>
         <tr>
             <td>b</td>
@@ -38,7 +48,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="提交">
+                <input id="submit" type="submit" value="提交">
             </td>
         </tr>
 

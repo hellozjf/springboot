@@ -1,5 +1,6 @@
 package com.hellozjf.test.springboot.form;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,7 +40,7 @@ public class HelloObjectForm {
     private String name;
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date time;
 
     @NotNull(message = "c必填")

@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum ResultEnum {
     CAN_NOT_FIND_THIS_ID_OBJECT(1, "无法找到此ID对应的对象"),
     PARAM_ERROR(2, "参数错误"),
+    FILE_ERROR(3, "文件错误"),
     ;
 
     Integer code;

@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Jingfeng Zhou
@@ -68,6 +69,20 @@ public class HelloObjectController {
     public ResultVO validateArray(@RequestBody String array) {
         log.debug("enter validateArray");
         log.debug("array={}", array);
+        return ResultUtils.success();
+    }
+
+    @PostMapping(value = "/validateJSONArray", consumes = "application/json")
+    public ResultVO validateJSONArray(@RequestBody List<HelloObjectForm> helloObjectFormList) {
+        log.debug("enter validateJSONArray");
+        log.debug("helloObjectFormList={}", helloObjectFormList);
+        return ResultUtils.success();
+    }
+
+    @PostMapping(value = "/validateJSONArrayParam")
+    public ResultVO validateJSONArrayParam(@RequestParam String helloObjectFormList) {
+        log.debug("enter validateJSONArrayParam");
+        log.debug("helloObjectFormList={}", helloObjectFormList);
         return ResultUtils.success();
     }
 

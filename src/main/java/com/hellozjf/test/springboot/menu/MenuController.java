@@ -38,4 +38,9 @@ public class MenuController {
     public String hello() {
         return "helloObject/helloObject";
     }
+
+    @GetMapping("/ajax")
+    public String ajax() {
+        return "ajax/ajax";
+    }
 }

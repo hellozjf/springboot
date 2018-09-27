@@ -8,7 +8,8 @@
 </head>
 <body>
 <h1>Spring Boot file upload example</h1>
-<form method="POST" th:action="@{/helloObject/}" enctype="application/x-www-form-urlencoded">
+<form method="POST" th:action="@{/helloObject/}" enctype="application/x-www-form-urlencoded"
+        onsubmit="return hello();">
     <table>
         <tr>
             <td>i</td>

@@ -4,13 +4,11 @@
     <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
     <script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ ''; </script>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script th:src="@{/js/ajax/ajax.js}"></script>
+    <script th:src="@{/js/promise/promise.js}"></script>
 </head>
 <body>
-<h1>Spring Boot file upload example</h1>
-<form method="POST" id="uploadForm" th:action="@{/ajax/uploadFile}" enctype="multipart/form-data" onsubmit="return ajaxSyncSendFile();">
-    <input id="file" type="file" name="file" /><br/><br/>
-    <input id="submit" type="submit" value="submit" />
-</form>
+
+<button onclick="start()">开始</button>
+
 </body>
 </html>

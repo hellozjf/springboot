@@ -43,4 +43,9 @@ public class MenuController {
     public String ajax() {
         return "ajax/ajax";
     }
+
+    @GetMapping("/promise")
+    public String promise() {
+        return "promise/promise";
+    }
 }

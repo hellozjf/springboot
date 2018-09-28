@@ -37,3 +37,35 @@ function ajaxSendFile() {
     }
     return false;
 }
+
+const readFile = (file) => new Promise((resolve) => {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        console.debug("onload");
+        var data = e.target.result;
+        resolve(data);
+    };
+    reader.readAsText(file, "UTF-8");
+});
+
+var ajaxSyncSendFile = (async () => {
+
+    // 首先获取<input type="file">
+    var file = $('#file');
+    if(file.value == "") {
+        alert('file不能为空');
+    }
+
+    // 然后取出该控件下面的文件数
+    var files = $('#file').prop('files');
+    if (files.length == 0) {
+        alert('请选择文件');
+        return false;
+    } else {
+        console.debug("begin");
+        let result = await readFile(files[0]);
+        console.debug("result=" + result);
+    }
+    console.debug("return false");
+    return false;
+})

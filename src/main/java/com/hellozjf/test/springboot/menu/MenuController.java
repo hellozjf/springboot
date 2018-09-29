@@ -48,4 +48,14 @@ public class MenuController {
     public String promise() {
         return "promise/promise";
     }
+
+    @GetMapping("/session")
+    public String session() {
+        return "session/session";
+    }
+
+    @GetMapping("/request")
+    public String request() {
+        return "session/request";
+    }
 }

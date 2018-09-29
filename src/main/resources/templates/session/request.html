@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录测试</title>
+    <!-- bootcdn -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.bootcss.com/jsencrypt/2.3.1/jsencrypt.min.js"></script>
+    <!-- 自定义js -->
+    <script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ ''; </script>
+</head>
+<body>
+
+<form th:action="@{/session/setRequestAttr}" method="post">
+    <div>
+        <label for="key">key</label><input id="key" type="text" name="key">
+    </div>
+    <div>
+        <label for="value">value</label><input id="value" type="text" name="value">
+    </div>
+    <input type="submit" value="提交">
+</form>
+
+</body>
+</html>

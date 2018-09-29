@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>登录测试</title>
+    <!-- bootcdn -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.bootcss.com/jsencrypt/2.3.1/jsencrypt.min.js"></script>
+    <!-- 自定义js -->
+    <script th:inline="javascript"> var contextRoot = /*[[@{/}]]*/ ''; </script>
+    <script>
+        function getAttr() {
+            var formData = new FormData($('#getAttrForm')[0]);
+            $.ajax({
+                url: contextRoot + "/session/getAttr",
+                data: formData,
+                type: 'POST',
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                dataType: "text",
+                processData: false,
+                success: function (response) {
+                    console.debug('response=' + response);
+                    $('#valueGet').val(response);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<form th:action="@{/session/setAttr}" method="post" target="id_iframe">
+    <div>
+        <label for="key">key</label><input id="key" type="text" name="key">
+    </div>
+    <div>
+        <label for="value">value</label><input id="value" type="text" name="value">
+    </div>
+    <input type="submit" value="提交">
+</form>
+
+<form th:action="@{/session/getAttr}" method="get" id="getAttrForm" target="id_iframe">
+    <div>
+        <label for="keyGet">key</label><input id="keyGet" type="text" name="key">
+    </div>
+    <input type="submit" value="提交" onclick="return getAttr();">
+</form>
+<label for="valueGet">value</label><input id="valueGet" type="text" name="value">
+
+<iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+
+</body>
+</html>

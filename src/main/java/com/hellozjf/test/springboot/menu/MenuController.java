@@ -14,6 +14,11 @@ public class MenuController {
         return "index";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
+
     @GetMapping("/upload")
     public String upload() {
         return "upload/upload";

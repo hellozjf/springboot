@@ -1,0 +1,25 @@
+server:
+  port: 9999
+  servlet:
+    context-path: /springboot
+logging:
+  level:
+    org.apache.zookeeper: warn
+    com.hellozjf.test.springboot: debug
+file:
+  writeToFile: false
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:h2:./db/test.db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true

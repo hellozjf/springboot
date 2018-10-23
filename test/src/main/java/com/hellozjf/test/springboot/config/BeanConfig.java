@@ -300,6 +300,25 @@ public class BeanConfig {
         testZkDelete();
     }
 
+    private void testListRemove() {
+        List<Integer> integerList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            integerList.add(i);
+        }
+        for (int i = 0; i < integerList.size(); i++) {
+            Integer t = integerList.get(i);
+            if (t % 3 == 0) {
+                // 移除能被3整除的元素
+                integerList.remove(t);
+                // 因为移除了元素，所以坐标也要减一
+                i--;
+            }
+        }
+        for (Integer i : integerList) {
+            log.debug("{}", i);
+        }
+    }
+
     @Bean
     public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
                                                @Qualifier("helloObjectList") final List<HelloObject> helloObjectList) {
@@ -314,7 +333,27 @@ public class BeanConfig {
             printMd();
             printFileEncoding();
             testList();
-            testZooKeeper();
+//            testZooKeeper();
+//            testListRemove();
+            testIteratorRemove();
         };
+    }
+
+    private void testIteratorRemove() {
+        List<Integer> integerList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            integerList.add(i);
+        }
+
+        for (Iterator<Integer> iter = integerList.iterator(); iter.hasNext(); ) {
+            Integer t = iter.next();
+            if (t % 3 == 0) {
+                iter.remove();
+            }
+        }
+
+        for (Integer i : integerList) {
+            log.debug("{}", i);
+        }
     }
 }

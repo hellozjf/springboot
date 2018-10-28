@@ -19,6 +19,8 @@ import org.springframework.core.io.Resource;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -319,24 +321,15 @@ public class BeanConfig {
         }
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
-                                               @Qualifier("helloObjectList") final List<HelloObject> helloObjectList) {
-        return args -> {
-            ObjectMapper objectMapper = new ObjectMapper();
-            log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
-            log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
 
-            testUrlEncoding();
-            testTime();
-            testUUID();
-            printMd();
-            printFileEncoding();
-            testList();
-//            testZooKeeper();
-//            testListRemove();
-            testIteratorRemove();
-        };
+    private void testClassLocation() {
+        try {
+            URL location = BeanConfig.class.getProtectionDomain().getCodeSource().getLocation();
+            String path = location.toURI().toString();
+            System.out.println(path);
+        } catch (URISyntaxException e) {
+            log.error("{}", e);
+        }
     }
 
     private void testIteratorRemove() {
@@ -355,5 +348,26 @@ public class BeanConfig {
         for (Integer i : integerList) {
             log.debug("{}", i);
         }
+    }
+
+    @Bean
+    public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
+                                               @Qualifier("helloObjectList") final List<HelloObject> helloObjectList) {
+        return args -> {
+            ObjectMapper objectMapper = new ObjectMapper();
+            log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
+            log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
+
+            testUrlEncoding();
+            testTime();
+            testUUID();
+            printMd();
+            printFileEncoding();
+            testList();
+//            testZooKeeper();
+//            testListRemove();
+            testIteratorRemove();
+            testClassLocation();
+        };
     }
 }

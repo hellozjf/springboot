@@ -1,0 +1,3 @@
+logging:
+  level:
+    com.hellozjf.test.springboot.netty: debug

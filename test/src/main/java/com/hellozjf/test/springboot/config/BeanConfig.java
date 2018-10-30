@@ -49,6 +49,7 @@ public class BeanConfig {
         helloObject.setId(11111111L);
         helloObject.setName("hello");
         helloObject.setTime(new Date());
+        helloObject.setData(new byte[] {(byte) 0x01, (byte) 0x02});
         return helloObject;
     }
 
@@ -64,6 +65,12 @@ public class BeanConfig {
         helloObject.setId(11111222L);
         helloObject.setName("helloworld");
         helloObject.setTime(new Date());
+
+        byte[] data = new byte[1024];
+        for (int i = 0; i < 1024; i++) {
+            data[i] = (byte) i;
+        }
+        helloObject.setData(data);
         return helloObject;
     }
 
@@ -352,7 +359,8 @@ public class BeanConfig {
 
     @Bean
     public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
-                                               @Qualifier("helloObjectList") final List<HelloObject> helloObjectList) {
+                                               @Qualifier("helloObjectList") final List<HelloObject> helloObjectList,
+                                               JsonProperties jsonProperties) {
         return args -> {
             ObjectMapper objectMapper = new ObjectMapper();
             log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
@@ -368,6 +376,24 @@ public class BeanConfig {
 //            testListRemove();
             testIteratorRemove();
             testClassLocation();
+            testPrintClass();
+            testJsonProperties(jsonProperties);
         };
+    }
+
+    private void testJsonProperties(JsonProperties jsonProperties) {
+        log.debug("host={}", jsonProperties.getHost());
+        log.debug("port={}", jsonProperties.getPort());
+        log.debug("resend={}", jsonProperties.isResend());
+        log.debug("topics={}", jsonProperties.getTopics());
+        log.debug("useName={}", jsonProperties.getUseName());
+        log.debug("portPassword={}", jsonProperties.getPortPassword());
+        log.debug("none={}", jsonProperties.getNone());
+    }
+
+    private void testPrintClass() {
+        Object object = new BeanConfig();
+        log.debug(object.getClass().toString());
+        log.debug(object.getClass().toGenericString());
     }
 }

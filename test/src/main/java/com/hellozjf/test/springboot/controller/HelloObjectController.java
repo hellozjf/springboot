@@ -36,7 +36,7 @@ public class HelloObjectController {
 
     @PostMapping("/")
     public ResultVO post(@Valid HelloObjectForm helloObjectForm,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult) throws Exception {
 
         if (bindingResult.hasErrors()) {
             log.error("【提交表单】参数不正确, helloObjectForm={}", helloObjectForm);
@@ -46,6 +46,7 @@ public class HelloObjectController {
 
         HelloObject helloObject = new HelloObject();
         BeanUtils.copyProperties(helloObjectForm, helloObject);
+        helloObject.setData(helloObjectForm.getData().getBytes("UTF-8"));
         HelloObject result = helloObjectService.save(helloObject);
         return ResultUtils.success(result);
     }

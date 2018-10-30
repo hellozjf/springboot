@@ -1,0 +1,11 @@
+{
+  "host" : "mailer@mail.com",
+  "port" : 9090,
+  "resend" : true,
+  "topics" : ["spring", "boot"],
+  "use_name" : "hellozjf",
+  "port_password" : {
+    "8388": "12345678",
+    "444": "889900"
+  }
+}

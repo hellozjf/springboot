@@ -45,4 +45,7 @@ public class HelloObjectForm {
 
     @NotNull(message = "c必填")
     private Character c;
+
+    @NotNull(message = "data必填")
+    private String data;
 }

@@ -1,6 +1,8 @@
 package com.hellozjf.test.springboot.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hellozjf.test.springboot.SpringContextUtil;
+import com.hellozjf.test.springboot.dao.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -378,7 +381,36 @@ public class BeanConfig {
             testClassLocation();
             testPrintClass();
             testJsonProperties(jsonProperties);
+
+            testGetBean();
+            testRegular();
         };
+    }
+
+    /**
+     * 普通方法上面加了@Transactional根本没用！！！
+     * @throws Exception
+     */
+    @Transactional(rollbackOn = Exception.class)
+    protected void testGetBean() throws Exception {
+        Object object = SpringContextUtil.getBean("helloObjectRepository");
+        if (object == null) {
+            log.debug("testGetBean failed");
+        } else {
+            if (object instanceof HelloObjectRepository) {
+                log.debug("testGetBean success");
+
+                // 我再试试非上下文里面能不能用事务
+//                HelloObjectRepository helloObjectRepository = (HelloObjectRepository) object;
+//
+//                HelloObject helloObject = new HelloObject();
+//                helloObject.setName(RandomStringUtils.randomAlphanumeric(99));
+//                helloObjectRepository.save(helloObject);
+//                HelloObject helloObject2 = new HelloObject();
+//                helloObject2.setName(RandomStringUtils.randomAlphanumeric(300));
+//                helloObjectRepository.save(helloObject2);
+            }
+        }
     }
 
     private void testJsonProperties(JsonProperties jsonProperties) {
@@ -395,5 +427,88 @@ public class BeanConfig {
         Object object = new BeanConfig();
         log.debug(object.getClass().toString());
         log.debug(object.getClass().toGenericString());
+    }
+
+    private void testRegular() {
+        String regular = "(!超市)(中的奖|中奖)(个税)";
+        String text = "银行抽中的奖要交个税么？";
+        boolean bFit = fitFullRegular(text, regular);
+        if (bFit) {
+            log.debug("文本符合规则");
+        } else {
+            log.debug("文本不符合规则");
+        }
+    }
+
+    /**
+     * 判断文本是否符合规则
+     * 问题1：规则要不要考虑顺序
+     * 问题2：括号里面会不会有括号
+     * 问题3：或和非会不会同时存在
+     * @param text 例如"超市抽中的奖要交个税么？"
+     * @param regular 例如"(!超市)(中的奖|中奖)(个税)"
+     * @return
+     */
+    private boolean fitFullRegular(String text, String regular) {
+
+        // 假设括号不会重叠，那么根据括号分成多组
+        List<String> regularList = splitRegularByBracket(regular);
+        log.debug("regularList = {}", regularList);
+
+        // 将规则组的每个项目都应用到text上面，最外层肯定是与规则
+        boolean bFit = true;
+        for (String reg : regularList) {
+            if (! fitSplitRegular(text, reg)) {
+                bFit = false;
+                break;
+            }
+        }
+        return bFit;
+    }
+
+    private boolean fitSplitRegular(String text, String reg) {
+        if (reg.startsWith("!")) {
+            // 非规则
+            String r = reg.substring(1);
+            if (text.contains(r)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (reg.contains("|")) {
+            // 或规则
+            String[] rs = reg.split("|");
+            for (String r : rs) {
+                if (text.contains(r)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return text.contains(reg);
+        }
+    }
+
+    private List<String> splitRegularByBracket(String regular) {
+        boolean bInBracket = false;
+        List<String> returnList = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < regular.length(); i++) {
+            char c = regular.charAt(i);
+            if (c == '(') {
+                bInBracket = true;
+            } else if (c == ')') {
+                bInBracket = false;
+                // 然后将stringBuilder的字符串放到returnList里面
+                returnList.add(stringBuilder.toString());
+                // 清空stringBuilder
+                stringBuilder.setLength(0);
+            } else {
+                if (bInBracket) {
+                    stringBuilder.append(c);
+                }
+            }
+        }
+        return returnList;
     }
 }

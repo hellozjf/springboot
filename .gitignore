@@ -26,3 +26,5 @@
 /.mvn/
 /mvnw.cmd
 /mvnw
+/tts_test.pcm
+/db/test.db.trace.db

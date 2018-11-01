@@ -384,7 +384,18 @@ public class BeanConfig {
 
             testGetBean();
             testRegular();
+            testRuntime();
         };
+    }
+
+    private void testRuntime() throws Exception {
+        Process process = Runtime.getRuntime().exec("cmd /k netstat -ano | findstr 135");
+        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = null;
+        log.debug("testRuntime");
+        while ((line = br.readLine()) != null) {
+            log.debug("{}", line);
+        }
     }
 
     /**
@@ -445,6 +456,8 @@ public class BeanConfig {
      * 问题1：规则要不要考虑顺序
      * 问题2：括号里面会不会有括号
      * 问题3：或和非会不会同时存在
+     * 问题4：文件内容会不会很大
+     * 问题5：规则要不要考虑跳过的字节
      * @param text 例如"超市抽中的奖要交个税么？"
      * @param regular 例如"(!超市)(中的奖|中奖)(个税)"
      * @return

@@ -7,7 +7,7 @@ logging:
     org.apache.zookeeper: warn
     com.hellozjf.test.springboot: debug
 file:
-  writeToFile: false
+  write-to-file: false
 spring:
   thymeleaf:
     cache: false

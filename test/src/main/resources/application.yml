@@ -22,6 +22,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: Zjf@1234
+#    url: jdbc:oracle:thin:@192.168.2.198:1521:orcl
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    username: arask
+#    password: arask1234
   jpa:
     show-sql: true
     hibernate:

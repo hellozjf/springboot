@@ -1,6 +1,8 @@
 package com.hellozjf.test.springboot.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.SimpleTimeLimiter;
+import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
 import com.hellozjf.test.springboot.dao.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import sun.security.action.GetPropertyAction;
 
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
@@ -26,9 +30,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.security.AccessController;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
 /**
  * @author Jingfeng Zhou
@@ -363,7 +375,8 @@ public class BeanConfig {
     @Bean
     public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
                                                @Qualifier("helloObjectList") final List<HelloObject> helloObjectList,
-                                               JsonProperties jsonProperties) {
+                                               JsonProperties jsonProperties,
+                                               JdbcTemplate jdbcTemplate) {
         return args -> {
             ObjectMapper objectMapper = new ObjectMapper();
             log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
@@ -385,7 +398,85 @@ public class BeanConfig {
             testGetBean();
             testRegular();
             testRuntime();
+            testSubmitRunnable();
+//            testOracle(jdbcTemplate);
+            testCalendar();
+            testCalendarHourOfDay();
+            testInstant();
         };
+    }
+
+    private void testInstant() {
+        Instant instant = Instant.now();
+        log.debug("instant = {}", instant);
+        OffsetDateTime offsetDateTime = instant.atOffset(ZoneOffset.of("+08:00"));
+        log.debug("offsetDateTime = {}", offsetDateTime);
+        OffsetDateTime offsetDateTime1 = offsetDateTime.withNano(0);
+        log.debug("offsetDateTime1 = {}", offsetDateTime1);
+        OffsetDateTime offsetDateTime2 = offsetDateTime.withSecond(0);
+        log.debug("offsetDateTime2 = {}", offsetDateTime2);
+        OffsetDateTime offsetDateTime3 = offsetDateTime.withMinute(0);
+        log.debug("offsetDateTime3 = {}", offsetDateTime3);
+        log.debug("instant = {}, offsetDateTime = {}", instant.toEpochMilli(), offsetDateTime.toEpochSecond());
+
+        OffsetDateTime hour = offsetDateTime.truncatedTo(ChronoUnit.HOURS);
+        log.debug("hour = {}", hour);
+        OffsetDateTime halfDay = offsetDateTime.truncatedTo(ChronoUnit.HALF_DAYS);
+        log.debug("halfDay = {}", halfDay);
+        OffsetDateTime day = offsetDateTime.truncatedTo(ChronoUnit.DAYS);
+        log.debug("day = {}", day);
+        OffsetDateTime week = offsetDateTime.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.dayOfWeekInMonth(0, DayOfWeek.MONDAY));
+        log.debug("week = {}", week);
+        OffsetDateTime minusWeek = week.minusWeeks(1);
+        log.debug("minusWeek = {}", minusWeek);
+    }
+
+    private void testCalendarHourOfDay() {
+
+        String zoneID = AccessController.doPrivileged(
+                new GetPropertyAction("user.timezone"));
+        log.debug("zoneID = {}", zoneID);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+08:00"));
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        log.debug("{}", calendar.getTime());
+    }
+
+    private void testCalendar() {
+        // 中国时区
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("CST"));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        log.debug("CST time = {}", calendar.getTime());
+        // 美国时区
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("EDT"));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        log.debug("EDT time = {}", calendar.getTime());
+        // 伦敦时区
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        log.debug("GMT time = {}", calendar.getTime());
+        // 日本时区
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("JST"));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        log.debug("JST time = {}", calendar.getTime());
+    }
+
+    private void testOracle(JdbcTemplate jdbcTemplate) {
+        //
+    }
+
+    private void testSubmitRunnable() throws ExecutionException, InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        log.debug("before testSubmitRunnable");
+        Future future = executorService.submit(() -> {
+            log.debug("testSubmitRunnable");
+        });
+        log.debug("after testSubmitRunnable");
+//        Object object = future.get();
+//        log.debug("future.get() = {}", object);
     }
 
     private void testRuntime() throws Exception {
@@ -393,8 +484,15 @@ public class BeanConfig {
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = null;
         log.debug("testRuntime");
-        while ((line = br.readLine()) != null) {
-            log.debug("{}", line);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        TimeLimiter timeLimiter = SimpleTimeLimiter.create(executorService);
+
+        try {
+            while ((line = timeLimiter.callWithTimeout(br::readLine, 2, TimeUnit.SECONDS)) != null) {
+                log.debug("{}", line);
+            }
+        } catch (TimeoutException ignore) {
+            // 忽略超时
         }
     }
 

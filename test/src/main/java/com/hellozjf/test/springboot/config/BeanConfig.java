@@ -26,6 +26,7 @@ import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -403,7 +404,15 @@ public class BeanConfig {
             testCalendar();
             testCalendarHourOfDay();
             testInstant();
+            testBigDecimal();
         };
+    }
+
+    private void testBigDecimal() {
+        BigDecimal bd1 = BigDecimal.ZERO;
+        BigDecimal bd2 = BigDecimal.ONE;
+        BigDecimal bd3 = bd1.add(bd2);
+        log.debug("bd1={} bd2={} bd3={}", bd1, bd2, bd3);
     }
 
     private void testInstant() {

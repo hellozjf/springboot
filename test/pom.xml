@@ -83,6 +83,18 @@
             <artifactId>guava</artifactId>
             <version>27.0-jre</version>
         </dependency>
+        <!-- 下面两个是ftp需要用到的库 -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>oro</groupId>
+            <artifactId>oro</artifactId>
+            <version>2.0.8</version>
+        </dependency>
+
     </dependencies>
 
     <build>

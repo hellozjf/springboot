@@ -8,11 +8,14 @@ import com.hellozjf.test.springboot.dao.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -23,9 +26,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import sun.security.action.GetPropertyAction;
 
 import javax.transaction.Transactional;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -42,6 +43,8 @@ import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author Jingfeng Zhou
@@ -65,7 +68,7 @@ public class BeanConfig {
         helloObject.setId(11111111L);
         helloObject.setName("hello");
         helloObject.setTime(new Date());
-        helloObject.setData(new byte[] {(byte) 0x01, (byte) 0x02});
+        helloObject.setData(new byte[]{(byte) 0x01, (byte) 0x02});
         return helloObject;
     }
 
@@ -405,7 +408,128 @@ public class BeanConfig {
             testCalendarHourOfDay();
             testInstant();
             testBigDecimal();
+//            testReadWriteLock();
+//            testFtp();
         };
+    }
+
+    private void testFtp() throws Exception {
+        connect("/vdb1/uploads/2018/11/14", "aliyun.hellozjf.com", 21, "hellozjf", "Zjf@1234");
+        File file = new File("D:\\hellozjf\\company\\zrar\\文档\\12366\\单点登录和补充用户信息\\ITS互联网应用单点登录集成标准V0.1.pdf");
+        upload(file);
+        System.out.println("ok");
+    }
+
+    private FTPClient ftp;
+
+    /**
+     *
+     * @param path 上传到ftp服务器哪个路径下
+     * @param addr 地址
+     * @param port 端口号
+     * @param username 用户名
+     * @param password 密码
+     * @return
+     * @throws Exception
+     */
+    private  boolean connect(String path,String addr,int port,String username,String password) throws Exception {
+        boolean result = false;
+        ftp = new FTPClient();
+        int reply;
+        ftp.connect(addr,port);
+        ftp.login(username,password);
+        ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
+//        ftp.sendCommand("OPTS UTF8", "ON");
+//        ftp.setControlEncoding("UTF-8");
+        ftp.setControlEncoding("gb2312");
+        reply = ftp.getReplyCode();
+        if (!FTPReply.isPositiveCompletion(reply)) {
+            ftp.disconnect();
+            return result;
+        }
+        ftp.changeWorkingDirectory(path);
+        result = true;
+        return result;
+    }
+    /**
+     *
+     * @param file 上传的文件或文件夹
+     * @throws Exception
+     */
+    private void upload(File file) throws Exception{
+        if(file.isDirectory()){
+            ftp.makeDirectory(file.getName());
+            ftp.changeWorkingDirectory(file.getName());
+            String[] files = file.list();
+            for (int i = 0; i < files.length; i++) {
+                File file1 = new File(file.getPath()+"\\"+files[i] );
+                if(file1.isDirectory()){
+                    upload(file1);
+                    ftp.changeToParentDirectory();
+                }else{
+                    File file2 = new File(file.getPath()+"\\"+files[i]);
+                    FileInputStream input = new FileInputStream(file2);
+//                    ftp.storeFile(new String(file2.getName().getBytes("GBK"), "ISO-8859-1"), input);
+                    ftp.storeFile(file2.getName(), input);
+                    input.close();
+                }
+            }
+        }else{
+            File file2 = new File(file.getPath());
+            FileInputStream input = new FileInputStream(file2);
+            ftp.storeFile(file2.getName(), input);
+            input.close();
+        }
+    }
+
+    class TestRunnable implements Runnable {
+
+        private String label;
+        private ReadWriteLock readWriteLock;
+
+        public TestRunnable(ReadWriteLock readWriteLock, String label) {
+            this.label = label;
+            this.readWriteLock = readWriteLock;
+        }
+
+        @Override
+        public void run() {
+            for (int i = 0; i < 10; i++) {
+                if (label.indexOf("reader") != -1) {
+                    readWriteLock.readLock().lock();
+                } else {
+                    readWriteLock.writeLock().lock();
+                }
+                log.debug("{}:{} enter", label, i);
+                try {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } finally {
+                    log.debug("{}:{} leave", label, i);
+                    if (label.indexOf("reader") != -1) {
+                        readWriteLock.readLock().unlock();
+                    } else {
+                        readWriteLock.writeLock().unlock();
+                    }
+                }
+            }
+        }
+    }
+
+    private void testReadWriteLock() {
+        ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+        TestRunnable reader1 = new TestRunnable(readWriteLock, "reader1");
+        TestRunnable reader2 = new TestRunnable(readWriteLock, "reader2");
+        TestRunnable writer1 = new TestRunnable(readWriteLock, "writer1");
+        TestRunnable writer2 = new TestRunnable(readWriteLock, "writer2");
+        Executor executor = Executors.newFixedThreadPool(4);
+        executor.execute(reader1);
+        executor.execute(reader2);
+        executor.execute(writer1);
+        executor.execute(writer2);
     }
 
     private void testBigDecimal() {
@@ -507,6 +631,7 @@ public class BeanConfig {
 
     /**
      * 普通方法上面加了@Transactional根本没用！！！
+     *
      * @throws Exception
      */
     @Transactional(rollbackOn = Exception.class)
@@ -565,7 +690,8 @@ public class BeanConfig {
      * 问题3：或和非会不会同时存在
      * 问题4：文件内容会不会很大
      * 问题5：规则要不要考虑跳过的字节
-     * @param text 例如"超市抽中的奖要交个税么？"
+     *
+     * @param text    例如"超市抽中的奖要交个税么？"
      * @param regular 例如"(!超市)(中的奖|中奖)(个税)"
      * @return
      */
@@ -578,7 +704,7 @@ public class BeanConfig {
         // 将规则组的每个项目都应用到text上面，最外层肯定是与规则
         boolean bFit = true;
         for (String reg : regularList) {
-            if (! fitSplitRegular(text, reg)) {
+            if (!fitSplitRegular(text, reg)) {
                 bFit = false;
                 break;
             }

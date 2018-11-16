@@ -18,7 +18,7 @@ spring:
 #    username: sa
 #    password:
     # mysql
-    url: jdbc:mysql://aliyun.hellozjf.com:3306/springboot?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://aliyun.hellozjf.com:3306/springboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: Zjf@1234
@@ -30,6 +30,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+    # 不加下面这句则默认为myisam引擎
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   h2:
     console:
       enabled: true

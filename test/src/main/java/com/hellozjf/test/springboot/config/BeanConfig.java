@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
-import com.hellozjf.test.springboot.dao.HelloObjectRepository;
+import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,6 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
-import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +38,6 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.*;
@@ -174,6 +172,10 @@ public class BeanConfig {
         String encodeHello = URLEncoder.encode(hello, "UTF-8");
         String decodeHello = URLDecoder.decode(encodeHello, "UTF-8");
         log.debug("encodeHello = {}, decodeHello = {}", encodeHello, decodeHello);
+        String uri = "http://www.baidu.com";
+        String encodeUri = URLEncoder.encode(uri, "UTF-8");
+        String decodeUri = URLDecoder.decode(encodeUri, "UTF-8");
+        log.debug("encodeUri = {}, decodeUri = {}", encodeUri, decodeUri);
     }
 
     private void testTime() throws Exception {
@@ -410,7 +412,19 @@ public class BeanConfig {
             testBigDecimal();
 //            testReadWriteLock();
 //            testFtp();
+            testFilePath();
         };
+    }
+
+    private void testFilePath() {
+        File file = new File("/opt/arask/oss/e5631d7a48eb45aca53b4a46acaf5fbe.zip");
+        File folder = new File("/opt/arask/oss");
+        if (! folder.exists()) {
+            folder.mkdirs();
+        }
+
+        log.debug("file.path={} folder.path={}", file.getAbsolutePath(), folder.getAbsolutePath());
+        log.debug("indexOf = {}", file.getAbsolutePath().indexOf(folder.getAbsolutePath()));
     }
 
     private void testFtp() throws Exception {

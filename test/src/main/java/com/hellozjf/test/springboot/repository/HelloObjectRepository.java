@@ -1,4 +1,4 @@
-package com.hellozjf.test.springboot.dao;
+package com.hellozjf.test.springboot.repository;
 
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import org.springframework.data.jpa.repository.JpaRepository;

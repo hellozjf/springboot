@@ -9,6 +9,10 @@ logging:
 file:
   write-to-file: false
 spring:
+  mail:
+    host: smtp.qq.com
+    username: 908686171@qq.com
+    password: qychdmkjpxjnbfbe
   thymeleaf:
     cache: false
   datasource:
@@ -18,21 +22,21 @@ spring:
 #    username: sa
 #    password:
     # mysql
-#    url: jdbc:mysql://aliyun.hellozjf.com:3306/springboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-#    driver-class-name: com.mysql.jdbc.Driver
-#    username: root
-#    password: Zjf@1234
+    url: jdbc:mysql://aliyun.hellozjf.com:3306/springboot?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Zjf@1234
     # oracle
-    url: jdbc:oracle:thin:@192.168.2.198:1521:orcl
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    username: arask
-    password: arask1234
+#    url: jdbc:oracle:thin:@192.168.2.198:1521:orcl
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    username: arask
+#    password: arask1234
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
     # 不加下面这句则默认为myisam引擎
-#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 #    database-platform: org.hibernate.dialect.Oracle11gDialect
   h2:
     console:

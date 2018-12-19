@@ -17,6 +17,7 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import sun.security.action.GetPropertyAction;
 
 import javax.transaction.Transactional;
@@ -55,6 +58,9 @@ public class BeanConfig {
 
     public static final String MY_FIRST_ZNODE = "/MyFirstZnode";
     public static final String ALIYUN_HELLOZJF_COM = "aliyun.hellozjf.com";
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Bean("helloObject")
     public HelloObject helloObject() {
@@ -416,7 +422,20 @@ public class BeanConfig {
 //            testFtp();
             testFilePath();
             testJSONArray();
+            testSendMail();
         };
+    }
+
+    private void testSendMail() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("908686171@qq.com");
+        message.setTo("908686171@qq.com");
+        message.setSubject("主题：抢到火车票啦");
+        String deptDate = "2018-12-30";
+
+        message.setText("出发时间:" + deptDate + " " + "123" + "\r车次:" + "124" + " [" + "125" + " 开往 " + "126" + "]\r票数:" + "127" + " [" + "128" + " ￥" + "129" + "] \r状态:" + "130" + "\r");
+        mailSender.send(message);
+        log.debug("邮件已发送");
     }
 
     private void testJSONArray() {

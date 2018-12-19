@@ -1,9 +1,11 @@
 package com.hellozjf.test.springboot.config;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
+import com.hellozjf.test.springboot.dataobject.Person;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
@@ -413,7 +415,14 @@ public class BeanConfig {
 //            testReadWriteLock();
 //            testFtp();
             testFilePath();
+            testJSONArray();
         };
+    }
+
+    private void testJSONArray() {
+//        JSONArray array = JSONArray.parseArray("[{'name':'hehe','age':22}]");
+        List<Person> list = JSONArray.parseArray("[{'name':'hehe','age':22}, {'name':'he2','age':21}]", Person.class);
+        log.debug("list = {}", list);
     }
 
     private void testFilePath() {

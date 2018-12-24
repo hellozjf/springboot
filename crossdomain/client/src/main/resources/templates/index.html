@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'; style-src cdn.example.org third-party.org; child-src https:">
+</head>
+<body>
+
+<button id="btn">点我</button>
+<a id="login" href="/login">login</a>
+<button id="btn2">点我跨域</button>
+<iframe id="iframe" style="display: none"></iframe>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('#btn').click(function () {
+        $.ajax({
+            url: "/hello",
+            type: 'GET',
+            dataType: "text",
+            success: function (response) {
+                console.debug(response);
+            }
+        });
+    });
+
+    $('#btn2').click(function () {
+        // $.ajax({
+        //     url: "http://localhost:10111/logout",
+        //     type: 'GET',
+        //     dataType: 'text',
+        //     success: function (response) {
+        //         console.debug(response);
+        //     }
+        // });
+        document.getElementById('iframe').src = "http://vultr.hellozjf.com:10111/logout";
+    })
+</script>
+</body>
+</html>

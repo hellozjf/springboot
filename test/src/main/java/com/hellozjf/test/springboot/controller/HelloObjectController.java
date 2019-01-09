@@ -6,6 +6,7 @@ import com.hellozjf.test.springboot.exception.HelloException;
 import com.hellozjf.test.springboot.form.HelloObjectForm;
 import com.hellozjf.test.springboot.service.HelloObjectService;
 import com.hellozjf.test.springboot.util.ResultUtils;
+import com.hellozjf.test.springboot.vo.BaiduTokenVO;
 import com.hellozjf.test.springboot.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +28,14 @@ public class HelloObjectController {
 
     @Autowired
     private HelloObjectService helloObjectService;
+
+    @Autowired
+    private BaiduTokenVO baiduTokenVO;
+
+    @GetMapping("/printBaiduTokenVO")
+    public ResultVO printBaiduTokenVO() {
+        return ResultUtils.success(baiduTokenVO);
+    }
 
     @GetMapping("/{id}")
     public ResultVO get(@PathVariable("id") Long id) {

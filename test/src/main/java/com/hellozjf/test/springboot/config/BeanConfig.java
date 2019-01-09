@@ -9,6 +9,7 @@ import com.hellozjf.test.springboot.dataobject.Person;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
+import com.hellozjf.test.springboot.vo.BaiduTokenVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -61,6 +62,14 @@ public class BeanConfig {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Bean("baiduTokenVO")
+    public BaiduTokenVO baiduTokenVO() {
+        BaiduTokenVO baiduTokenVO = new BaiduTokenVO();
+        baiduTokenVO.setExpire(3600);
+        baiduTokenVO.setToken("123");
+        return baiduTokenVO;
+    }
 
     @Bean("helloObject")
     public HelloObject helloObject() {
@@ -390,7 +399,8 @@ public class BeanConfig {
     public CommandLineRunner commandLineRunner(@Qualifier("helloObject2") final HelloObject helloObject,
                                                @Qualifier("helloObjectList") final List<HelloObject> helloObjectList,
                                                JsonProperties jsonProperties,
-                                               JdbcTemplate jdbcTemplate) {
+                                               JdbcTemplate jdbcTemplate,
+                                               BaiduTokenVO baiduTokenVO) {
         return args -> {
             ObjectMapper objectMapper = new ObjectMapper();
             log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
@@ -422,8 +432,16 @@ public class BeanConfig {
 //            testFtp();
             testFilePath();
             testJSONArray();
-            testSendMail();
+//            testSendMail();
+
+            // 修改baiduTokenVO
+            changeBaiduTokenVO(baiduTokenVO);
         };
+    }
+
+    private void changeBaiduTokenVO(BaiduTokenVO baiduTokenVO) {
+        baiduTokenVO.setToken("456");
+        baiduTokenVO.setExpire(7200);
     }
 
     private void testSendMail() {

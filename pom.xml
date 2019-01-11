@@ -13,6 +13,7 @@
         <module>crossdomain</module>
         <module>zookeeper</module>
         <module>elasticsearch</module>
+        <module>zk-curator</module>
     </modules>
     <packaging>pom</packaging>
 

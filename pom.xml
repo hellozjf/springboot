@@ -12,6 +12,7 @@
         <module>netty</module>
         <module>crossdomain</module>
         <module>zookeeper</module>
+        <module>elasticsearch</module>
     </modules>
     <packaging>pom</packaging>
 

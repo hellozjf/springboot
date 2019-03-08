@@ -10,6 +10,10 @@ import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.dataobject.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import com.hellozjf.test.springboot.vo.BaiduTokenVO;
+import com.hellozjf.test.springboot.vo.ResultVO;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -32,6 +36,7 @@ import sun.security.action.GetPropertyAction;
 
 import javax.transaction.Transactional;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -436,7 +441,78 @@ public class BeanConfig {
 
             // 修改baiduTokenVO
             changeBaiduTokenVO(baiduTokenVO);
+
+            // 生成pdf
+            createPdf();
+
+            // 替换<br/>
+            testReplaceBr();
+
+            // 测试反射
+            testReflect();
+
+            // 测试函数是否会改变对象的值
+            testFunctionWillChangeObjectValue();
         };
+    }
+
+    private void changeResultVO(ResultVO resultVO) {
+        resultVO.setCode(2);
+        resultVO.setMsg("msg2");
+    }
+
+    private void testFunctionWillChangeObjectValue() {
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(1);
+        resultVO.setMsg("msg");
+        log.debug("resultVO = {}", resultVO);
+        changeResultVO(resultVO);
+        log.debug("resultVO = {}", resultVO);
+    }
+
+    private void testReflect() throws Exception {
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(1);
+        resultVO.setMsg("hello");
+
+        Class clazz = ResultVO.class;
+        Field[] fields = clazz.getFields();
+        Field[] declaredFields = clazz.getDeclaredFields();
+        log.debug("fields");
+        for (Field field : fields) {
+            log.debug("field={}", field);
+        }
+        log.debug("declaredFields");
+        for (Field field : declaredFields) {
+            log.debug("fieldName={}", field.getName());
+            if (field.getName().equalsIgnoreCase("code")) {
+                field.setAccessible(true);
+                Object object = field.get(resultVO);
+                if (object instanceof Integer) {
+                    log.debug("resultVO.code={}", (Integer) object);
+                }
+            } else if (field.getName().equalsIgnoreCase("msg")) {
+                field.setAccessible(true);
+                Object object = field.get(resultVO);
+                if (object instanceof String) {
+                    log.debug("resultVO.msg={}", (String) object);
+                }
+            }
+        }
+    }
+
+    private void testReplaceBr() {
+        String str = "helllo<br/>test<br/>jfkdls";
+        String s = str.replaceAll("<br/>", "\n");
+        log.debug(s);
+    }
+
+    private void createPdf() throws Exception {
+        Document document = new Document();
+        BaseFont bfChinese = BaseFont.createFont("STSong-Light","UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
+        Font headfont = new Font(bfChinese, 10, Font.BOLD);
+        Font keyfont = new Font(bfChinese, 8, Font.BOLD);
+        Font textfont = new Font(bfChinese, 8, Font.NORMAL);
     }
 
     private void changeBaiduTokenVO(BaiduTokenVO baiduTokenVO) {

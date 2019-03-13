@@ -1,6 +1,10 @@
 package com.hellozjf.test.tensorflow;
 
 import lombok.extern.slf4j.Slf4j;
+import org.python.core.PyDictionary;
+import org.python.core.PyFile;
+import org.python.core.PyString;
+import org.python.modules.cPickle;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -87,10 +91,34 @@ public class BeanConfig {
         }
     }
 
+    /**
+     * 加载数据
+     */
+    private void loadData() throws Exception {
+        PyFile pyFile = new PyFile("tensorflow/cifar-10-batches-py/data_batch_1", "rb", 0);
+//        PyString pyString = pyFile.readline();
+//        log.debug("pyString={}", pyString);
+        Object object = cPickle.load(pyFile);
+//        log.debug("object={}", object);
+
+//        File file = new File("tensorflow/cifar-10-batches-py/data_batch_1");
+//        log.debug("file={}", file.getAbsolutePath());
+    }
+
+    private void loadPickle() throws Exception {
+        PyFile pyFile = new PyFile("tensorflow/pickle_test/save.txt", "rb", 0);
+        Object object = cPickle.load(pyFile);
+        log.debug("object.getClass() = {}", object.getClass());
+        log.debug("object={}", object);
+        PyDictionary pyDictionary = (PyDictionary) object;
+        log.debug("{},{},{}", pyDictionary.get(1), pyDictionary.get(2), pyDictionary.get(3));
+    }
+
     @Bean
     public CommandLineRunner commandLineRunner() {
         return args -> {
-
+//            model_convnet();
+            loadPickle();
         };
     }
 }

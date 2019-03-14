@@ -72,8 +72,8 @@ public class BeanConfig {
      * 预测图片
      * @throws Exception
      */
-    private void model_convnet(byte[] bytes) throws Exception {
-        SavedModelBundle b = SavedModelBundle.load("tensorflow/model_convnet", "mytag");
+    private long model_convnet(byte[] bytes) throws Exception {
+        SavedModelBundle b = SavedModelBundle.load("tensorflow/test-cnn", "mytag");
         Session tfSession = b.session();
         //要执行的op
         Operation operationPredict = b.graph().operation("predict");
@@ -90,8 +90,10 @@ public class BeanConfig {
             s.copyTo(t);
             for (long i : t) {
                 System.out.println(i);
+                return i;
             }
         }
+        return -1;
     }
 
     /**
@@ -179,10 +181,19 @@ public class BeanConfig {
             jep.eval("import os");
             jep.eval("f = open('tensorflow/cifar-10-batches-py/test_batch', 'rb')");
             jep.eval("data = cPickle.load(f)");
-            jep.eval("index = 104");
-            byte[] bytes = jep.getValue("data['data'][index]", byte[].class);
-            jep.eval("data['labels'][index]");
-            model_convnet(bytes);
+
+            int rightCount = 0;
+            for (int i = 0; i < 1000; i++) {
+                jep.eval("index = " + i);
+                byte[] bytes = jep.getValue("data['data'][index]", byte[].class);
+                jep.eval("data['labels'][index]");
+                int aValue = (int) jep.getValue("data['labels'][index]");
+                long bValue = model_convnet(bytes);
+                if (aValue == bValue) {
+                    rightCount++;
+                }
+            }
+            log.debug("rightCount = {}", rightCount);
         };
     }
 }

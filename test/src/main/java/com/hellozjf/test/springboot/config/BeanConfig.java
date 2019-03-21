@@ -2,6 +2,18 @@ package com.hellozjf.test.springboot.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Container;
+import com.github.dockerjava.api.model.Event;
+import com.github.dockerjava.api.model.Info;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.command.EventsResultCallback;
+import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
@@ -453,7 +465,27 @@ public class BeanConfig {
 
             // 测试函数是否会改变对象的值
             testFunctionWillChangeObjectValue();
+
+            // 测试easy12306
+            testEasy12306();
         };
+    }
+
+    private void testEasy12306() throws Exception {
+        Runtime runtime = Runtime.getRuntime();
+        Process process = runtime.exec("test/shell/win/easy12306.bat");
+        try (
+                InputStream inputStream = process.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader)
+        ) {
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                log.debug("{}", line);
+            }
+        } catch (Exception e) {
+            log.error("e = {}", e);
+        }
     }
 
     private void changeResultVO(ResultVO resultVO) {

@@ -1,4 +1,4 @@
-package com.hellozjf.test.springboot.dataobject;
+package com.hellozjf.test.springboot.entity;
 
 /**
  * @author Jingfeng Zhou

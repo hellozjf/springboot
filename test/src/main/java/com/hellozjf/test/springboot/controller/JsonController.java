@@ -1,7 +1,7 @@
 package com.hellozjf.test.springboot.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hellozjf.test.springboot.dataobject.HelloObject;
+import com.hellozjf.test.springboot.entity.HelloObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

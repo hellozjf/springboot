@@ -1,7 +1,7 @@
 package com.hellozjf.test.springboot.controller;
 
 import com.hellozjf.test.springboot.constant.ResultEnum;
-import com.hellozjf.test.springboot.dataobject.HelloObject;
+import com.hellozjf.test.springboot.entity.HelloObject;
 import com.hellozjf.test.springboot.exception.HelloException;
 import com.hellozjf.test.springboot.form.HelloObjectForm;
 import com.hellozjf.test.springboot.service.HelloObjectService;

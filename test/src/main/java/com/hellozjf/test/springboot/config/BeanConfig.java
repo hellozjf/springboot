@@ -2,24 +2,12 @@ package com.hellozjf.test.springboot.config;
 
 import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.github.dockerjava.api.command.StartContainerCmd;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.Event;
-import com.github.dockerjava.api.model.Info;
-import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.command.EventsResultCallback;
-import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
-import com.hellozjf.test.springboot.dataobject.Person;
+import com.hellozjf.test.springboot.entity.Person;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
-import com.hellozjf.test.springboot.dataobject.HelloObject;
+import com.hellozjf.test.springboot.entity.HelloObject;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import com.hellozjf.test.springboot.vo.BaiduTokenVO;
 import com.hellozjf.test.springboot.vo.ResultVO;
@@ -419,56 +407,64 @@ public class BeanConfig {
                                                JdbcTemplate jdbcTemplate,
                                                BaiduTokenVO baiduTokenVO) {
         return args -> {
-            ObjectMapper objectMapper = new ObjectMapper();
-            log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
-            log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
+//            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
+        };
+    }
 
-            testUrlEncoding();
-            testTime();
-            testUUID();
-            printMd();
-            printFileEncoding();
-            testList();
+    private void testAll(final HelloObject helloObject,
+                         final List<HelloObject> helloObjectList,
+                         JsonProperties jsonProperties,
+                         JdbcTemplate jdbcTemplate,
+                         BaiduTokenVO baiduTokenVO) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        log.debug("helloObject = {}", objectMapper.writeValueAsString(helloObject));
+        log.debug("helloObjectList = {}", objectMapper.writeValueAsString(helloObjectList));
+
+        testUrlEncoding();
+        testTime();
+        testUUID();
+        printMd();
+        printFileEncoding();
+        testList();
 //            testZooKeeper();
 //            testListRemove();
-            testIteratorRemove();
-            testClassLocation();
-            testPrintClass();
-            testJsonProperties(jsonProperties);
+        testIteratorRemove();
+        testClassLocation();
+        testPrintClass();
+        testJsonProperties(jsonProperties);
 
-            testGetBean();
-            testRegular();
-            testRuntime();
-            testSubmitRunnable();
+        testGetBean();
+        testRegular();
+        testRuntime();
+        testSubmitRunnable();
 //            testOracle(jdbcTemplate);
-            testCalendar();
-            testCalendarHourOfDay();
-            testInstant();
-            testBigDecimal();
+        testCalendar();
+        testCalendarHourOfDay();
+        testInstant();
+        testBigDecimal();
 //            testReadWriteLock();
 //            testFtp();
-            testFilePath();
-            testJSONArray();
+        testFilePath();
+        testJSONArray();
 //            testSendMail();
 
-            // 修改baiduTokenVO
-            changeBaiduTokenVO(baiduTokenVO);
+        // 修改baiduTokenVO
+        changeBaiduTokenVO(baiduTokenVO);
 
-            // 生成pdf
-            createPdf();
+        // 生成pdf
+        createPdf();
 
-            // 替换<br/>
-            testReplaceBr();
+        // 替换<br/>
+        testReplaceBr();
 
-            // 测试反射
-            testReflect();
+        // 测试反射
+        testReflect();
 
-            // 测试函数是否会改变对象的值
-            testFunctionWillChangeObjectValue();
+        // 测试函数是否会改变对象的值
+        testFunctionWillChangeObjectValue();
 
-            // 测试easy12306
-            testEasy12306();
-        };
+        // 测试easy12306
+        testEasy12306();
     }
 
     private void testEasy12306() throws Exception {

@@ -1,4 +1,4 @@
-package com.hellozjf.test.springboot.dataobject;
+package com.hellozjf.test.springboot.entity;
 
 import lombok.extern.slf4j.Slf4j;
 

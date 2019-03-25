@@ -1,7 +1,7 @@
 package com.hellozjf.test.springboot.util;
 
-import com.hellozjf.test.springboot.dataobject.FileObject;
-import com.hellozjf.test.springboot.dataobject.QaFile;
+import com.hellozjf.test.springboot.entity.FileObject;
+import com.hellozjf.test.springboot.entity.QaFile;
 
 import java.util.ArrayList;
 import java.util.Date;

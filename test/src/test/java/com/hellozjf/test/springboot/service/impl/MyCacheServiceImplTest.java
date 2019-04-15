@@ -1,6 +1,6 @@
 package com.hellozjf.test.springboot.service.impl;
 
-import com.hellozjf.test.springboot.entity.MyCacheEntity;
+import com.hellozjf.test.springboot.domain.MyCacheEntity;
 import com.hellozjf.test.springboot.service.MyCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Jingfeng Zhou

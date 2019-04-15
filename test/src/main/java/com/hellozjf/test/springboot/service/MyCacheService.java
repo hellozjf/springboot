@@ -1,6 +1,6 @@
 package com.hellozjf.test.springboot.service;
 
-import com.hellozjf.test.springboot.entity.MyCacheEntity;
+import com.hellozjf.test.springboot.domain.MyCacheEntity;
 
 /**
  * @author Jingfeng Zhou

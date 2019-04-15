@@ -2,8 +2,8 @@ package com.hellozjf.test.springboot.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.hellozjf.test.springboot.constant.ResultEnum;
-import com.hellozjf.test.springboot.entity.FileObject;
-import com.hellozjf.test.springboot.entity.QaFile;
+import com.hellozjf.test.springboot.domain.FileObject;
+import com.hellozjf.test.springboot.domain.QaFile;
 import com.hellozjf.test.springboot.repository.QaFileRepository;
 import com.hellozjf.test.springboot.util.QaFileUtils;
 import com.hellozjf.test.springboot.util.ResultUtils;

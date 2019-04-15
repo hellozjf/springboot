@@ -1,7 +1,7 @@
 package com.hellozjf.test.springboot.controller;
 
 import com.hellozjf.test.springboot.constant.ResultEnum;
-import com.hellozjf.test.springboot.entity.HelloObject;
+import com.hellozjf.test.springboot.domain.HelloObject;
 import com.hellozjf.test.springboot.service.AjaxService;
 import com.hellozjf.test.springboot.util.ResultUtils;
 import com.hellozjf.test.springboot.vo.ResultVO;

@@ -2,7 +2,7 @@ package com.hellozjf.test.springboot.service.impl;
 
 import com.hellozjf.test.springboot.constant.ResultEnum;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
-import com.hellozjf.test.springboot.entity.HelloObject;
+import com.hellozjf.test.springboot.domain.HelloObject;
 import com.hellozjf.test.springboot.exception.HelloException;
 import com.hellozjf.test.springboot.service.HelloObjectService;
 import org.springframework.beans.factory.annotation.Autowired;

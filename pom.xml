@@ -15,6 +15,7 @@
         <module>elasticsearch</module>
         <module>zk-curator</module>
         <module>tensorflow</module>
+        <module>cassandra</module>
     </modules>
     <packaging>pom</packaging>
 

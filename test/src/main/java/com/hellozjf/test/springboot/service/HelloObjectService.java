@@ -1,6 +1,6 @@
 package com.hellozjf.test.springboot.service;
 
-import com.hellozjf.test.springboot.entity.HelloObject;
+import com.hellozjf.test.springboot.domain.HelloObject;
 
 /**
  * @author Jingfeng Zhou

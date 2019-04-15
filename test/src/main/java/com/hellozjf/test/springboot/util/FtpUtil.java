@@ -1,6 +1,6 @@
 package com.hellozjf.test.springboot.util;
 
-import com.hellozjf.test.springboot.entity.Ftp;
+import com.hellozjf.test.springboot.domain.Ftp;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;

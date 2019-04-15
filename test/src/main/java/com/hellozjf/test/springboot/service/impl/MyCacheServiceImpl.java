@@ -1,9 +1,8 @@
 package com.hellozjf.test.springboot.service.impl;
 
-import com.hellozjf.test.springboot.entity.MyCacheEntity;
+import com.hellozjf.test.springboot.domain.MyCacheEntity;
 import com.hellozjf.test.springboot.repository.MyCacheRepository;
 import com.hellozjf.test.springboot.service.MyCacheService;
-import com.hellozjf.test.springboot.vo.MyCacheVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;

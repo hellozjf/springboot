@@ -44,10 +44,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.AccessController;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -407,7 +404,7 @@ public class BeanConfig {
                                                JdbcTemplate jdbcTemplate,
                                                BaiduTokenVO baiduTokenVO) {
         return args -> {
-//            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
+            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
         };
     }
 
@@ -464,7 +461,54 @@ public class BeanConfig {
         testFunctionWillChangeObjectValue();
 
         // 测试easy12306
-        testEasy12306();
+//        testEasy12306();
+
+        // 测试当天零点时间
+        testZeroDate();
+
+        // 测试split
+        testSplit();
+
+        // 测试LocalDateTime
+        testLocalDateTime();
+
+        // 测试List转String
+        testListToString(objectMapper);
+    }
+
+    private void testListToString(ObjectMapper objectMapper) throws Exception {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("a");
+        log.debug("list = {}", objectMapper.writeValueAsString(list));
+    }
+
+    private void testLocalDateTime() {
+        LocalDateTime ldt = LocalDateTime.of(2019, 4, 17, 0, 0);
+        log.debug("{}", ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
+        LocalDateTime ldt2 = LocalDateTime.now();
+        ldt2 = ldt2.withNano(0);
+        ldt2 = ldt2.withSecond(0);
+        ldt2 = ldt2.withMinute(0);
+        log.debug("{}", ldt2.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
+        ldt2 = ldt2.withHour(23);
+        log.debug("{}", ldt2.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
+
+    private void testSplit() {
+        String s = "你好|您好";
+        String[] ss = s.split("\\|");
+        log.debug("ss = {}", Arrays.toString(ss));
+    }
+
+    /**
+     * 参考https://blog.csdn.net/qq_41574321/article/details/81631284
+     */
+    private void testZeroDate() {
+        long zero = System.currentTimeMillis() / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset();
+        log.debug("zero = {}", zero);
     }
 
     private void testEasy12306() throws Exception {

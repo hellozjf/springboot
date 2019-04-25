@@ -16,6 +16,7 @@
         <module>zk-curator</module>
         <module>tensorflow</module>
         <module>cassandra</module>
+        <module>httpclient</module>
     </modules>
     <packaging>pom</packaging>
 

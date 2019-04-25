@@ -159,7 +159,7 @@
                         <!--<manifest>-->
                             <!--<addClasspath>true</addClasspath>-->
                             <!--<classpathPrefix>lib/</classpathPrefix>-->
-                            <!--<mainClass>com.hellozjf.test.springboot.SpringbootApplication</mainClass>-->
+                            <!--<mainClass>com.hellozjf.test.springboot.com.hellozjf.test.httpclient.SpringbootApplication</mainClass>-->
                         <!--</manifest>-->
                     <!--</archive>-->
                 <!--</configuration>-->

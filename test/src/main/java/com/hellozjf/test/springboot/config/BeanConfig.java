@@ -6,8 +6,10 @@ import com.google.common.util.concurrent.SimpleTimeLimiter;
 import com.google.common.util.concurrent.TimeLimiter;
 import com.hellozjf.test.springboot.SpringContextUtil;
 import com.hellozjf.test.springboot.domain.Person;
+import com.hellozjf.test.springboot.repository.CsadstateRepository;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.domain.HelloObject;
+import com.hellozjf.test.springboot.repository.T_XT_YHRepository;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import com.hellozjf.test.springboot.vo.BaiduTokenVO;
 import com.hellozjf.test.springboot.vo.ResultVO;
@@ -402,10 +404,22 @@ public class BeanConfig {
                                                @Qualifier("helloObjectList") final List<HelloObject> helloObjectList,
                                                JsonProperties jsonProperties,
                                                JdbcTemplate jdbcTemplate,
-                                               BaiduTokenVO baiduTokenVO) {
+                                               BaiduTokenVO baiduTokenVO,
+                                               CsadstateRepository csadstateRepository,
+                                               T_XT_YHRepository t_xt_yhRepository) {
         return args -> {
-            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
+//            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
+            getAllCsadState(csadstateRepository);
+            getAllT_XT_YH(t_xt_yhRepository);
         };
+    }
+
+    private void getAllCsadState(CsadstateRepository csadstateRepository) {
+        log.debug("csadstate.size = {}", csadstateRepository.findAll().size());
+    }
+
+    private void getAllT_XT_YH(T_XT_YHRepository t_xt_yhRepository) {
+        log.debug("t_xt_yh.size = {}", t_xt_yhRepository.findAll().size());
     }
 
     private void testAll(final HelloObject helloObject,
@@ -432,7 +446,7 @@ public class BeanConfig {
 
         testGetBean();
         testRegular();
-        testRuntime();
+//        testRuntime();
         testSubmitRunnable();
 //            testOracle(jdbcTemplate);
         testCalendar();
@@ -820,22 +834,22 @@ public class BeanConfig {
 //        log.debug("future.get() = {}", object);
     }
 
-    private void testRuntime() throws Exception {
-        Process process = Runtime.getRuntime().exec("cmd /k netstat -ano | findstr 135");
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line = null;
-        log.debug("testRuntime");
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        TimeLimiter timeLimiter = SimpleTimeLimiter.create(executorService);
-
-        try {
-            while ((line = timeLimiter.callWithTimeout(br::readLine, 2, TimeUnit.SECONDS)) != null) {
-                log.debug("{}", line);
-            }
-        } catch (TimeoutException ignore) {
-            // 忽略超时
-        }
-    }
+//    private void testRuntime() throws Exception {
+//        Process process = Runtime.getRuntime().exec("cmd /k netstat -ano | findstr 135");
+//        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//        String line = null;
+//        log.debug("testRuntime");
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        TimeLimiter timeLimiter = SimpleTimeLimiter.create(executorService);
+//
+//        try {
+//            while ((line = timeLimiter.callWithTimeout(br::readLine, 2, TimeUnit.SECONDS)) != null) {
+//                log.debug("{}", line);
+//            }
+//        } catch (TimeoutException ignore) {
+//            // 忽略超时
+//        }
+//    }
 
     /**
      * 普通方法上面加了@Transactional根本没用！！！

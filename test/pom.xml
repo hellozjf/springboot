@@ -58,16 +58,20 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.h2database</groupId>-->
-            <!--<artifactId>h2</artifactId>-->
+        <!--<groupId>com.h2database</groupId>-->
+        <!--<artifactId>h2</artifactId>-->
         <!--</dependency>-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>mysql</groupId>-->
+        <!--<artifactId>mysql-connector-java</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-cassandra</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -75,11 +79,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.hynnet/oracle-driver-ojdbc -->
-        <!--<dependency>-->
-            <!--<groupId>com.hynnet</groupId>-->
-            <!--<artifactId>oracle-driver-ojdbc</artifactId>-->
-            <!--<version>12.1.0.2</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.hynnet</groupId>
+            <artifactId>oracle-driver-ojdbc</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.pegdown</groupId>
@@ -96,11 +100,11 @@
             <artifactId>nls-sdk-tts</artifactId>
             <version>2.0.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>27.0-jre</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+            <!--<version>27.0-jre</version>-->
+        <!--</dependency>-->
         <!-- 下面两个是ftp需要用到的库 -->
         <dependency>
             <groupId>commons-net</groupId>
@@ -153,33 +157,33 @@
             </plugin>
             <!--&lt;!&ndash; Set up JAR manifest &ndash;&gt;-->
             <!--<plugin>-->
-                <!--<artifactId>maven-jar-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<archive>-->
-                        <!--<manifest>-->
-                            <!--<addClasspath>true</addClasspath>-->
-                            <!--<classpathPrefix>lib/</classpathPrefix>-->
-                            <!--<mainClass>com.hellozjf.test.springboot.com.hellozjf.test.httpclient.SpringbootApplication</mainClass>-->
-                        <!--</manifest>-->
-                    <!--</archive>-->
-                <!--</configuration>-->
+            <!--<artifactId>maven-jar-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<archive>-->
+            <!--<manifest>-->
+            <!--<addClasspath>true</addClasspath>-->
+            <!--<classpathPrefix>lib/</classpathPrefix>-->
+            <!--<mainClass>com.hellozjf.test.springboot.com.hellozjf.test.httpclient.SpringbootApplication</mainClass>-->
+            <!--</manifest>-->
+            <!--</archive>-->
+            <!--</configuration>-->
             <!--</plugin>-->
             <!--&lt;!&ndash; Copy Maven dependencies into target/lib/ &ndash;&gt;-->
             <!--<plugin>-->
-                <!--<artifactId>maven-dependency-plugin</artifactId>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>initialize</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>copy-dependencies</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<overWriteReleases>false</overWriteReleases>-->
-                            <!--<includeScope>runtime</includeScope>-->
-                            <!--<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+            <!--<artifactId>maven-dependency-plugin</artifactId>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<phase>initialize</phase>-->
+            <!--<goals>-->
+            <!--<goal>copy-dependencies</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<overWriteReleases>false</overWriteReleases>-->
+            <!--<includeScope>runtime</includeScope>-->
+            <!--<outputDirectory>${project.build.directory}/lib</outputDirectory>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
             <!--</plugin>-->
             <plugin>
                 <groupId>com.spotify</groupId>
@@ -187,9 +191,16 @@
                 <version>${dockerfile-maven-version}</version>
                 <executions>
                     <execution>
-                        <id>default</id>
+                        <id>build</id>
+                        <phase>install</phase>
                         <goals>
                             <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>push</id>
+                        <phase>deploy</phase>
+                        <goals>
                             <goal>push</goal>
                         </goals>
                     </execution>

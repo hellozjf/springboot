@@ -17,6 +17,7 @@
         <module>tensorflow</module>
         <module>cassandra</module>
         <module>httpclient</module>
+        <module>dubbo-demo</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -10,6 +10,7 @@ import com.hellozjf.test.springboot.repository.CsadstateRepository;
 import com.hellozjf.test.springboot.repository.HelloObjectRepository;
 import com.hellozjf.test.springboot.domain.HelloObject;
 import com.hellozjf.test.springboot.repository.T_XT_YHRepository;
+import com.hellozjf.test.springboot.service.HelloObjectService;
 import com.hellozjf.test.springboot.util.ZooKeeperConnectionUtils;
 import com.hellozjf.test.springboot.vo.BaiduTokenVO;
 import com.hellozjf.test.springboot.vo.ResultVO;
@@ -39,6 +40,7 @@ import sun.security.action.GetPropertyAction;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -409,9 +411,15 @@ public class BeanConfig {
                                                T_XT_YHRepository t_xt_yhRepository) {
         return args -> {
 //            testAll(helloObject, helloObjectList, jsonProperties, jdbcTemplate, baiduTokenVO);
-            getAllCsadState(csadstateRepository);
-            getAllT_XT_YH(t_xt_yhRepository);
+//            getAllCsadState(csadstateRepository);
+//            getAllT_XT_YH(t_xt_yhRepository);
+            testReflect();
         };
+    }
+
+    private void testReflect() throws Exception {
+        Method method = HelloObjectService.class.getMethod("findById", Long.class);
+        log.debug("method = {}", method);
     }
 
     private void getAllCsadState(CsadstateRepository csadstateRepository) {
@@ -467,9 +475,6 @@ public class BeanConfig {
 
         // 替换<br/>
         testReplaceBr();
-
-        // 测试反射
-        testReflect();
 
         // 测试函数是否会改变对象的值
         testFunctionWillChangeObjectValue();
@@ -554,37 +559,6 @@ public class BeanConfig {
         log.debug("resultVO = {}", resultVO);
         changeResultVO(resultVO);
         log.debug("resultVO = {}", resultVO);
-    }
-
-    private void testReflect() throws Exception {
-        ResultVO resultVO = new ResultVO();
-        resultVO.setCode(1);
-        resultVO.setMsg("hello");
-
-        Class clazz = ResultVO.class;
-        Field[] fields = clazz.getFields();
-        Field[] declaredFields = clazz.getDeclaredFields();
-        log.debug("fields");
-        for (Field field : fields) {
-            log.debug("field={}", field);
-        }
-        log.debug("declaredFields");
-        for (Field field : declaredFields) {
-            log.debug("fieldName={}", field.getName());
-            if (field.getName().equalsIgnoreCase("code")) {
-                field.setAccessible(true);
-                Object object = field.get(resultVO);
-                if (object instanceof Integer) {
-                    log.debug("resultVO.code={}", (Integer) object);
-                }
-            } else if (field.getName().equalsIgnoreCase("msg")) {
-                field.setAccessible(true);
-                Object object = field.get(resultVO);
-                if (object instanceof String) {
-                    log.debug("resultVO.msg={}", (String) object);
-                }
-            }
-        }
     }
 
     private void testReplaceBr() {
